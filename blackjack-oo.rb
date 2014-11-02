@@ -47,15 +47,6 @@ class Card
 end
 
 module Hand
-	# Displays the current hand.
-	def show_hand
-		puts "---- #{name}'s Hand: ----"
-		cards.each do |card|
-			puts "=> #{card}"
-		end
-		puts "=> Total value: #{total_value}"
-	end
-
 	# Calculates the total value of a hand.
 	def total_value
 		sum = 0
@@ -92,6 +83,15 @@ class Player
 		@name = "Player"
 		@cards = []
 	end
+
+	# Displays the current hand.
+	def show_hand
+		puts "---- #{name}'s Hand: ----"
+		cards.each do |card|
+			puts "=> #{card}"
+		end
+		puts "=> Total value: #{total_value}"
+	end
 end
 
 class Dealer
@@ -102,6 +102,13 @@ class Dealer
 	def initialize
 		@name = "Dealer"
 		@cards = []
+	end
+
+	# Displays the current hand.
+	def show_hand
+		puts "---- #{name}'s Hand: ----"
+		puts "=> First card is hidden."
+		puts "=> Second card is #{cards[1]}"
 	end
 end
 
@@ -182,7 +189,6 @@ class Game
 		# Dealer keeps hitting until it reaches at least 17.
 		while (dealer.total_value < 17)
 			dealer.add_card(deck.deal_one)
-			puts "Dealer's new total is #{dealer.total_value}."
 			if blackjack?(dealer)
 				puts "Dealer has hit blackjack! Sorry, you lost."
 				exit
@@ -198,9 +204,9 @@ class Game
 		if dealer.total_value == player.total_value
 			puts "It's a tie."
 		elsif dealer.total_value > player.total_value
-			puts "Dealer has a better hand. Sorry, you lost."
+			puts "Dealer has a total value of #{dealer.total_value}. Sorry, you lost."
 		else
-			puts "You have the better hand. Yay! You won!"
+			puts "Dealer has a total value of #{dealer.total_value}. You have the better hand. Yay! You won!"
 		end
 	end
 
