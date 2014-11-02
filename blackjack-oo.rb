@@ -124,18 +124,22 @@ class Game
 		obj.total_value > 21
 	end
 
-	def play
-		# Shuffle the deck.
-		deck.shuffle_deck!
-		# Both the player and the dealer gets dealt 2 cards.
+	# Both the player and the dealer gets dealt 2 cards.
+	def deal_cards
 		player.add_card(deck.deal_one)
 		player.add_card(deck.deal_one)
 		dealer.add_card(deck.deal_one)
 		dealer.add_card(deck.deal_one)
-		# Display the current hands.
+	end
+
+	# Display the current hands.
+	def show_hands
 		player.show_hand
 		dealer.show_hand
-		# Check for blackjack.
+	end
+
+	# Check for blackjack.
+	def check_for_blackjack
 		if blackjack?(player)
 			puts "Player has hit blackjack! You won!"
 			exit
@@ -143,8 +147,10 @@ class Game
 			puts "Dealer has hit blackjack! You lost!"
 			exit
 		end
+	end
 
-		# Player's turn.
+	# Player's turn.
+	def players_turn
 		loop do
 			# Asks if player wants to hit or stay.
 			begin
@@ -154,7 +160,7 @@ class Game
 			# If player chooses to 1) Hit.
 			if choice == 1
 				player.add_card(deck.deal_one)
-				player.show_hand
+				puts "Your new total is #{player.total_value}."
 				if blackjack?(player)
 					puts "Player has hit blackjack! You won!"
 					exit
@@ -169,12 +175,14 @@ class Game
 				break
 			end
 		end
+	end
 
-		# Dealer's turn.
+	# Dealer's turn.
+	def dealers_turn
 		# Dealer keeps hitting until it reaches at least 17.
 		while (dealer.total_value < 17)
 			dealer.add_card(deck.deal_one)
-			dealer.show_hand
+			puts "Dealer's new total is #{dealer.total_value}."
 			if blackjack?(dealer)
 				puts "Dealer has hit blackjack! Sorry, you lost."
 				exit
@@ -183,8 +191,10 @@ class Game
 				exit
 			end
 		end
+	end
 
-		# Compare player and dealer's hand to find the winner.
+	# Compare player and dealer's hand to find the winner.
+	def find_winner
 		if dealer.total_value == player.total_value
 			puts "It's a tie."
 		elsif dealer.total_value > player.total_value
@@ -192,6 +202,16 @@ class Game
 		else
 			puts "You have the better hand. Yay! You won!"
 		end
+	end
+
+	def play
+		deck.shuffle_deck!
+		deal_cards
+		show_hands
+		check_for_blackjack
+		players_turn
+		dealers_turn
+		find_winner
 	end
 end
 
